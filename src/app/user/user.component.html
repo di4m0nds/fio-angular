@@ -1,0 +1,61 @@
+@if (isLoggedIn) {
+    <h1>Welcome, <strong>{{ username }}</strong>!</h1>
+
+    <button (click)="isLoggedIn = false">
+        <strong>Logout</strong>
+    </button>
+
+    <section class="animate__animated animate__backInRight animate__faster">
+        @defer (on viewport) {
+            <img
+                alt="photo"
+                src="https://github.com/{{ username }}.png"
+                (click)="greet()"
+            />
+        } @placeholder {
+            <div class="skeleton-avatar"></div>
+        } @loading {
+            <div class="skeleton-avatar"></div>
+        }
+
+        <div>
+            <app-games
+                (wantsToPlayEvent)="getWantsToPlayGame($event)"
+                username="{{ username }}"
+            />
+        </div>
+    </section>
+
+    <button (click)="clearWantsToPlayGame()">Clear game</button>
+
+    @if (wantsToPlayGameName !== '') {
+        <main class="animate__animated animate__zoomInUp">
+            <section>
+                <span>{{ wantsToPlayGameDescription }}</span>
+                @defer (on viewport) {
+                    <img src="{{ wantsToPlayGameImage }}" alt="game-image">
+                } @placeholder {
+                    <div class="skeleton-avatar"></div>
+                } @loading {
+                    <div class="skeleton-avatar"></div>
+                }   
+            </section>
+            <br><br>
+            <a
+                href="https://www.google.com/search?q={{ wantsToPlayGameName }}&sourceid=chrome&ie=UTF-8"
+                target="_blank"
+                class="wantsToPlayGameName"
+            >
+                {{ username }}  wants to play <strong>{{ wantsToPlayGameName }}</strong>
+            </a>
+        </main>
+    }
+} @else {
+    <h1>You must need to<br>
+        <strong>Login</strong> to see
+        <br>the content
+    </h1>
+    <button (click)="isLoggedIn = true">
+        <strong>Login</strong>
+    </button>
+}
